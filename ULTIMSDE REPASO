@@ -1,0 +1,25 @@
+dispsrador(trigger)
+es un objeto de base de datos que siempre se ejecuta automatico, es decir, nunca se invoca manual mente y en este curso son de tipo
+DML (DATA MANIPULATION LANGUAGE).
+DDL(DATA DESCRIPTION LANGUAGE). Son usuarios que les dan permisos.
+y los disparadores de tipo DML solo se aplican a las operaciones siguiente:  (jamas esta definida en los DML)
+-insert
+-update
+-delate
+
+
+disparadores   -DML    -automatizacion
+                       -validacion   -BEFORE (generalmente estas son para validar)
+                                     -AFTER  (generalmente son para automatizar)
+                                     
+                                     
+              -DDL 
+              
+              
+              
+                                   -PERISTENCIA
+MVC
+(MODELO VISTA CONTROLADOR)         -TRANSACCION
+
+
+
