@@ -1,0 +1,2 @@
+1)oracle.  crear en oracle un procedimiento para actualizar el precio de un producto por medio de id_producto
+2)oracle.  crear un disparador de tipo update y BEFORE para impedir que la actualizacion se ingrese un precio menor que el anterior
