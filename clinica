@@ -1,0 +1,167 @@
+create table Perfil_usuario(
+Id_empleado INTEGER,
+Nombre VARCHAR2(120),
+Cargo VARCHAR2(120),
+Turno varchar(20),
+constraint pk_Id_empleado primary key(Id_empleado));
+
+create table Paciente(
+Id_paciente INTEGER,
+Id_empleado INTEGER,
+NSS varchar(20),
+Nombre varchar2(120),
+Edad INTEGER,
+Fecha_ingreso date,
+Informe_interno VARCHAR2(500),
+Informe_familiar VARCHAR2(250),
+Salida_paciente date,
+constraint pk_Id_paciente primary key(Id_paciente),
+constraint fk_Id_empleado foreign key(Id_empleado) references Perfil_Usuario(Id_empleado));
+
+create table Diagnóstico(
+Id_diagnóstico integer,
+Id_paciente integer,
+Id_empleado INTEGER,
+Padecimiento VARCHAR2(150),
+Tratamiento VARCHAR2(200),
+Seguimiento VARCHAR2(150),
+constraint pk_Id_diagnóstico primary key(Id_diagnóstico),
+constraint fk_Id_paciente foreign key(Id_paciente) references Paciente(Id_paciente),
+constraint fk1_Id_empleado foreign key(Id_empleado) references Perfil_Usuario(Id_empleado));
+
+create table Responsable(
+Id_doctor integer,
+Nombre VARCHAR2(120),
+Especialidad VARCHAR2(120),
+Área varchar2(30),
+constraint pk_Id_doctor primary key(Id_doctor));
+
+create table Intervenciones(
+Id_intervención INTEGER,
+Id_paciente INTEGER,
+Intervención VARCHAR2(50),
+Cédula_Doctor VARCHAR2(50),
+Síntomas_observados VARCHAR2(120),
+Tratamiento_prescrito VARCHAR2(120),
+constraint pk_Id_intevención primary key(Id_intervención),
+constraint fk1_Id_paciente foreign key(Id_paciente) references Paciente(Id_paciente));
+
+create sequence sec_perfil_usuario
+start with 1
+increment by 1
+nomaxvalue;
+
+create sequence sec_paciente
+start with 1
+increment by 1
+nomaxvalue;
+
+create sequence sec_diagnóstico
+start with 1
+increment by 1
+nomaxvalue;
+
+
+
+create sequence sec_responsable
+start with 1
+increment by 1
+nomaxvalue;
+
+create sequence sec_intervenciones
+start with 1
+increment by 1
+nomaxvalue;
+
+create or replace PROCEDURE GUARDAR_paciente(
+my_Id_paciente OUT INTEGER,
+my_Id_empleado in INTEGER,
+my_NSS in varchar2,
+my_Nombre in varchar2,
+my_Edad in INTEGER,
+my_Fecha_ingreso in date,
+my_Informe_interno in VARCHAR2,
+my_Informe_familiar in VARCHAR2,
+my_Salida_paciente in date)
+AS
+BEGIN 
+SELECT SEC_paciente.NEXTVAL INTO MY_ID_paciente FROM DUAL;
+INSERT INTO Paciente VALUES(
+my_Id_paciente,
+my_Id_empleado,
+my_NSS,
+my_Nombre,
+my_Edad,
+my_Fecha_ingreso,
+my_Informe_interno,
+my_Informe_familiar,
+my_Salida_paciente);
+END;
+/
+
+create or replace procedure guardar_diagnóstico(
+my_Id_diagnóstico out integer,
+my_Id_paciente in integer,
+my_Id_empleado in INTEGER,
+my_Padecimiento in VARCHAR2,
+my_Tratamiento in VARCHAR2,
+my_Seguimiento in VARCHAR2)
+as
+begin
+select sec_diagnóstico.nextval into my_Id_diagnóstico from dual;
+insert into Diagnóstico values(
+my_Id_diagnóstico,
+my_Id_paciente,
+my_Id_empleado,
+my_Padecimiento,
+my_Tratamiento,
+my_Seguimiento);
+END;
+/
+
+create or replace procedure guardar_Perfil_usuario(
+my_Id_empleado out INTEGER,
+my_Nombre in VARCHAR2,
+my_Cargo in VARCHAR2,
+my_Turno in varchar2)
+as
+begin
+select sec_perfil_usuario.nextval into my_id_empleado from dual;
+insert into Perfil_Usuario values(
+my_Id_empleado,
+my_Nombre,
+my_Cargo,
+my_Turno);
+END;
+/
+
+--INSERT INTO PRODUCTO VALUES(1,'GALLETAS MARIAS','GAMESA', 'CEREALES', 34.50 );
+INSERT INTO Perfil_usuario VALUES(1, 'Javier', 'Supervisor', 'Matutino');
+
+select * from Perfil_usuario;
+
+--CREAR UN DISPARADOR TRIGGER
+
+CREATE OR REPLACE PROCEDURE PRO_ACTUALIZAR_Peril(
+My_Id_empleado in integer,
+My_Turno in varchar2)
+AS
+BEGIN
+UPDATE Perfil_usuario SET Turno = MY_Turno WHERE Id_empleado = MY_Id_empleado;
+end;
+/
+
+CREATE OR REPLACE TRIGGER DISPARADOR_Perfil_usuario BEFORE UPDATE ON Perfil_usuario
+FOR EACH ROW
+BEGIN
+IF :NEW.Turno=:OLD.Turno THEN
+dbms_output.put_line('Turno cambiado  ');
+END IF;
+END;
+/
+--actualizar
+BEGIN
+PRO_ACTUALIZAR_Peril(1,'Vespertino');
+END;
+/
+SELECT * FROM Perfil_usuario;
