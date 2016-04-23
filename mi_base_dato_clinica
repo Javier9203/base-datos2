@@ -19,7 +19,7 @@ my_Turno in varchar2)
 as
 BEGIN
       INSERT INTO Perfil_usuario (Id_empleado,Nombre, Cargo, Turno)
-      VALUES (sec_perfil_usuario, my_Nombre, my_Cargo,my_Turno);
+      VALUES (sec_perfil_usuario.NEXTVAL, my_Nombre, my_Cargo,my_Turno);
       commit;
 END; 
 /
